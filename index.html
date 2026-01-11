@@ -145,6 +145,12 @@
       left: calc((var(--boxW) * 3 + var(--gapX) * 2) - 1px);
       width: calc(var(--gapX) + 1px);
     }
+    /* Make connector lines visually present but not clickable */
+  .v-line,
+  .h-line,
+  .left-h {
+  pointer-events: none;
+  }
   </style>
 </head>
 
@@ -207,6 +213,7 @@
   </div>
 </body>
 </html>
+
 
 
 
