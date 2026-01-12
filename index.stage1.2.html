@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Target Screening</title>
+
+  <style>
+    :root{
+      --blue: #2f64f5;
+      --line: var(--blue);
+      --border: 2px solid var(--blue);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing (matches your compact style) */
+      --boxW: 105px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 12px;
+
+      /* Typography (same as previous code) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    /* 500x500 frame pinned top-left */
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header{
+      background: var(--blue);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: 8px; /* slight breathing room under header */
+    }
+
+    /* Clickable boxes */
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2; /* keep above lines just in case */
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Connector lines between boxes (center-to-center) */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: calc(8px + (var(--boxH) / 2)); /* center of the row */
+      pointer-events: none; /* do not block clicks */
+      z-index: 1;
+    }
+
+    /* Between col 1 and col 2 */
+    .h12{
+      left: calc(var(--boxW));
+      width: var(--gapX);
+    }
+
+    /* Between col 2 and col 3 */
+    .h23{
+      left: calc((var(--boxW) * 2) + var(--gapX));
+      width: var(--gapX);
+    }
+
+    /* Between col 3 and col 4 */
+    .h34{
+      left: calc((var(--boxW) * 3) + (var(--gapX) * 2));
+      width: var(--gapX);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Target Screening</div>
+
+    <div class="flow">
+      <!-- 1110 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1060.aspx?csf=1&web=1&e=rNAqqO"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1110</div>
+        <div class="text">Establish<br/>Screening<br/>Criteria</div>
+      </a>
+
+      <!-- 1120 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1120--Build-Long-List.aspx?csf=1&web=1&e=x6TSfu"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1120</div>
+        <div class="text">Build Long<br/>List</div>
+      </a>
+
+      <!-- 1130 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1130--Conduct-Preliminary-Assessment.aspx?csf=1&web=1&e=555dIc"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1130</div>
+        <div class="text">Conduct<br/>Preliminary<br/>Assessment</div>
+      </a>
+
+      <!-- 1140 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1140--Create-Short-List-%26-Prioritize-Approaches.aspx?csf=1&web=1&e=jcwNUW"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1140</div>
+        <div class="text">Create Short<br/>List &amp;<br/>Prioritize<br/>Approaches</div>
+      </a>
+
+      <!-- connector lines -->
+      <div class="h-line h12" aria-hidden="true"></div>
+      <div class="h-line h23" aria-hidden="true"></div>
+      <div class="h-line h34" aria-hidden="true"></div>
+    </div>
+  </div>
+</body>
+</html>
+
