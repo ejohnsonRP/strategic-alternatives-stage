@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Integration Planning</title>
+
+  <style>
+    :root{
+      /* Green used everywhere (matches screenshot tone) */
+      --green: #0aa84f;
+
+      --border: 3px solid var(--green);
+      --line: var(--green);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 90px;
+      --boxH: 110px;
+      --boxPad: 10px;
+
+      /* Spacing */
+      --gapX: 10px;
+
+      /* Typography (STANDARD across all pages) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Layout helpers */
+      --flowTopPad: 10px;
+      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    .header{
+      background: var(--green);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: var(--flowTopPad);
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 400;
+      margin: 0 0 6px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* Straight connector lines */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: var(--rowCenterY);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Integration Planning</div>
+
+    <div class="flow">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3210--Establish.aspx?csf=1&web=1&e=G4Q8pM"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3210</div>
+        <div class="text">
+          Establish<br/>
+          Integration<br/>
+          Governance<br/>
+          and<br/>
+          Organization
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3220--Develop-Integration-Strategy-and-Approach.aspx?csf=1&web=1&e=GmTUNi"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3220</div>
+        <div class="text">
+          Develop<br/>
+          Integration<br/>
+          Strategy and<br/>
+          Approach
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3230--Buid-Detailed-Integration-Plan.aspx?csf=1&web=1&e=BVCnL0"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3230</div>
+        <div class="text">
+          Build Detailed<br/>
+          Integration<br/>
+          Plan
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3240--Execute-Day-1-Readiness-Pl.aspx?csf=1&web=1&e=YUEpeac"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3240</div>
+        <div class="text">
+          Execute Day<br/>
+          1 Readiness<br/>
+          Planning
+        </div>
+      </a>
+
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-3250--Prepare-CH.aspx?csf=1&web=1&e=UIgEhJ"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">3250</div>
+        <div class="text">
+          Prepare<br/>
+          Change<br/>
+          Management<br/>
+          and Comms
+        </div>
+      </a>
+
+      <!-- connector lines -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+      <div class="h-line h45"></div>
+    </div>
+  </div>
+</body>
+</html>
