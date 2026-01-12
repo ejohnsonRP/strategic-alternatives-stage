@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Approaching Companies</title>
+
+  <style>
+    :root{
+      --blue: #2f64f5;
+      --line: var(--blue);
+      --border: 2px solid var(--blue);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing (keeps font sizes unchanged) */
+      --boxW: 88px;     /* narrower so 5 fit */
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Tighter spacing between boxes */
+      --gapX: 6px;
+
+      /* Typography (DO NOT CHANGE from previous code) */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header{
+      background: var(--blue);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      column-gap: var(--gapX);
+      align-items: start;
+      padding-top: 8px;
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Connector lines between boxes (center-to-center) */
+    .h-line{
+      position: absolute;
+      height: 2px;
+      background: var(--line);
+      top: calc(8px + (var(--boxH) / 2)); /* center of the row */
+      pointer-events: none; /* don't block clicks */
+      z-index: 1;
+    }
+
+    /* Lines between each adjacent pair */
+    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
+    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
+    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h45{ left: calc((var(--boxW) * 4) + (var(--gapX) * 3)); width: var(--gapX); }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Approaching Companies</div>
+
+    <div class="flow">
+      <!-- 1210 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1210--Develop-Approach-Strategy.aspx?csf=1&web=1&e=eBkji6"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1210</div>
+        <div class="text">Develop<br/>Approach<br/>Strategy</div>
+      </a>
+
+      <!-- 1220 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1220-.aspx?csf=1&web=1&e=FAbkCv"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1220</div>
+        <div class="text">Prepare<br/>Positioning<br/>Materials</div>
+      </a>
+
+      <!-- 1230 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1230-.aspx?csf=1&web=1&e=sRT91S"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1230</div>
+        <div class="text">Make Initial<br/>Contact</div>
+      </a>
+
+      <!-- 1240 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1240--Gau.aspx?csf=1&web=1&e=rjAirc"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1240</div>
+        <div class="text">Gauge<br/>Interest &amp;<br/>Readiness</div>
+      </a>
+
+      <!-- 1250 -->
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1250-.aspx?csf=1&web=1&e=qCgXGn"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1250</div>
+        <div class="text">Sign NDA</div>
+      </a>
+
+      <!-- connector lines -->
+      <div class="h-line h12" aria-hidden="true"></div>
+      <div class="h-line h23" aria-hidden="true"></div>
+      <div class="h-line h34" aria-hidden="true"></div>
+      <div class="h-line h45" aria-hidden="true"></div>
+    </div>
+  </div>
+</body>
+</html>
