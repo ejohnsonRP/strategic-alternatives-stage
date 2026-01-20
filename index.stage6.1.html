@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plan Program</title>
+
+  <style>
+    :root{
+      /* Dark blue theme */
+      --blue: #0b2a66;
+
+      --line: var(--blue);
+      --border: 2px solid var(--blue);
+
+      /* Fixed viewport */
+      --frameW: 500px;
+      --frameH: 500px;
+
+      /* Box sizing */
+      --boxW: 85px;
+      --boxH: 115px;
+      --boxPad: 8px;
+
+      /* Spacing */
+      --gapX: 8px;
+
+      /* Typography */
+      --headerFont: 17px;
+      --stepFont: 11px;
+      --textFont: 9.5px;
+
+      /* Grid row gap (needed for bracket math) */
+      --rowGap: 18px;
+
+      /* Y centers for each row inside .flow */
+      --y1: calc(8px + (var(--boxH) / 2));
+      --y2: calc(8px + var(--boxH) + var(--rowGap) + (var(--boxH) / 2));
+      --y3: calc(8px + (var(--boxH) * 2) + (var(--rowGap) * 2) + (var(--boxH) / 2));
+
+      /* X anchors for columns */
+      --col1Start: 0px;
+      --col2Start: calc(var(--boxW) + var(--gapX));
+      --col3Start: calc((var(--boxW) * 2) + (var(--gapX) * 2));
+      --col4Start: calc((var(--boxW) * 3) + (var(--gapX) * 3));
+      --col5Start: calc((var(--boxW) * 4) + (var(--gapX) * 4));
+
+      --col1Right: calc(var(--col1Start) + var(--boxW));
+      --col2Right: calc(var(--col2Start) + var(--boxW));
+      --col3Right: calc(var(--col3Start) + var(--boxW));
+      --col4Right: calc(var(--col4Start) + var(--boxW));
+      --col5Right: calc(var(--col5Start) + var(--boxW));
+
+      /* Bracket geometry */
+      --bracketOffset: 6px;  /* spine distance outside boxes */
+      --armLen: 10px;        /* bracket arm length */
+    }
+
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+
+    .frame{
+      width: var(--frameW);
+      height: var(--frameH);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header{
+      background: var(--blue);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: var(--headerFont);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .flow{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, var(--boxW));
+      grid-template-rows: repeat(3, var(--boxH));
+      column-gap: var(--gapX);
+      row-gap: var(--rowGap);
+      align-items: start;
+      padding-top: 8px;
+    }
+
+    .box-link{
+      display: block;
+      width: var(--boxW);
+      height: var(--boxH);
+      border: var(--border);
+      padding: var(--boxPad);
+      box-sizing: border-box;
+      background: #fff;
+      text-decoration: none;
+      color: inherit;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step{
+      font-size: var(--stepFont);
+      font-weight: 700;
+      margin: 0 0 5px 0;
+      color: var(--blue);
+    }
+
+    .text{
+      font-size: var(--textFont);
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* Placement */
+    .b6010{ grid-column: 1; grid-row: 2; }
+
+    .b6020{ grid-column: 2; grid-row: 1; }
+    .b6030{ grid-column: 2; grid-row: 2; }
+    .b6040{ grid-column: 2; grid-row: 3; }
+
+    .b6050{ grid-column: 3; grid-row: 2; }
+    .b6060{ grid-column: 4; grid-row: 2; }
+
+    .b6070{ grid-column: 5; grid-row: 1; }
+    .b6080{ grid-column: 5; grid-row: 3; }
+
+    /* connector primitives */
+    .h-line, .v-line{
+      position: absolute;
+      background: var(--line);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .h-line{ height: 2px; }
+    .v-line{ width: 2px; }
+
+    /* Main row connectors (row 2) */
+    .h12{
+      left: var(--col1Right);
+      top: var(--y2);
+      width: var(--gapX);
+    }
+    .h23{
+      left: var(--col2Right);
+      top: var(--y2);
+      width: var(--gapX);
+    }
+    .h34{
+      left: var(--col3Right);
+      top: var(--y2);
+      width: var(--gapX);
+    }
+
+    /* Center bracket (left side of col2 stack) */
+    .c-spine{
+      left: calc(var(--col2Start) - var(--bracketOffset));
+      top: var(--y1);
+      height: calc(var(--y3) - var(--y1));
+    }
+    .c-arm-top{
+      left: calc(var(--col2Start) - var(--bracketOffset));
+      top: var(--y1);
+      width: var(--armLen);
+    }
+    .c-arm-bot{
+      left: calc(var(--col2Start) - var(--bracketOffset));
+      top: var(--y3);
+      width: var(--armLen);
+    }
+    .c-join{
+      left: calc(var(--col1Right) + var(--gapX));
+      top: var(--y2);
+      width: calc(var(--col2Start) - (var(--col1Right) + var(--gapX)) - var(--bracketOffset));
+    }
+
+    /* Right bracket (left side of col5 stack) */
+    .r-join{
+      left: var(--col4Right);
+      top: var(--y2);
+      width: calc(var(--col5Start) - var(--col4Right) - var(--bracketOffset));
+    }
+    .r-spine{
+      left: calc(var(--col5Start) - var(--bracketOffset));
+      top: var(--y1);
+      height: calc(var(--y3) - var(--y1));
+    }
+    .r-arm-top{
+      left: calc(var(--col5Start) - var(--bracketOffset));
+      top: var(--y1);
+      width: var(--armLen);
+    }
+    .r-arm-bot{
+      left: calc(var(--col5Start) - var(--bracketOffset));
+      top: var(--y3);
+      width: var(--armLen);
+    }
+
+    /* ✅ NEW: Right-side bracket for ROW 2 (on the right side of 6060) */
+    .m2-spine{
+      /* spine sits just to the right of col4 box */
+      left: calc(var(--col4Right) + var(--bracketOffset));
+      top: calc(var(--y2) - 18px);
+      height: 36px;
+    }
+    .m2-arm{
+      /* arm hooks LEFT into the box at row2 center */
+      left: calc(var(--col4Right) + var(--bracketOffset) - var(--armLen));
+      top: var(--y2);
+      width: var(--armLen);
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="header">Plan Program</div>
+
+    <div class="flow">
+      <!-- Boxes -->
+      <a class="box-link b6010" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6010</div>
+        <div class="text">Understand<br/>Program<br/>Expectations</div>
+      </a>
+
+      <a class="box-link b6020" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6020</div>
+        <div class="text">Design<br/>Management<br/>Processes</div>
+      </a>
+
+      <a class="box-link b6030" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6030</div>
+        <div class="text">Structure<br/>Governance</div>
+      </a>
+
+      <a class="box-link b6040" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6040</div>
+        <div class="text">Develop<br/>Work<br/>breakdown<br/>Structure</div>
+      </a>
+
+      <a class="box-link b6050" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6050</div>
+        <div class="text">Develop<br/>Project Plans</div>
+      </a>
+
+      <a class="box-link b6060" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6060</div>
+        <div class="text">Develop<br/>Program<br/>Master Plan</div>
+      </a>
+
+      <a class="box-link b6070" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6070</div>
+        <div class="text">Identify<br/>dependencies</div>
+      </a>
+
+      <a class="box-link b6080" href="#" target="_blank" rel="noopener noreferrer">
+        <div class="step">6080</div>
+        <div class="text">Identify<br/>Resource<br/>Needs</div>
+      </a>
+
+      <!-- Main connectors -->
+      <div class="h-line h12"></div>
+      <div class="h-line h23"></div>
+      <div class="h-line h34"></div>
+
+      <!-- Center bracket -->
+      <div class="v-line c-spine"></div>
+      <div class="h-line c-arm-top"></div>
+      <div class="h-line c-arm-bot"></div>
+      <div class="h-line c-join"></div>
+
+      <!-- Right bracket (col5 stack) -->
+      <div class="h-line r-join"></div>
+      <div class="v-line r-spine"></div>
+      <div class="h-line r-arm-top"></div>
+      <div class="h-line r-arm-bot"></div>
+
+      <!-- ✅ NEW right-side bracket for row 2 (6060) -->
+      <div class="v-line m2-spine"></div>
+      <div class="h-line m2-arm"></div>
+
+    </div>
+  </div>
+
+  <script>
+    /* optional: prevent # jump while prototyping */
+    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
+      a.addEventListener('click', e => e.preventDefault());
+    });
+  </script>
+</body>
+</html>
