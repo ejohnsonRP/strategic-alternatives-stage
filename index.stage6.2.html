@@ -1,194 +1,163 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mobilize Program</title>
 
   <style>
     :root{
-      /* Navy theme (requested) */
-      --navy: #0b2a66;
+      --navy:#0b2a66;
 
-      --line: var(--navy);
-      --border: 2px solid var(--navy);
+      /* “original template” typography */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* spacing */
+      --pad:6px;
+      --gapX:28px;   /* space between columns */
+      --gapY:12px;   /* vertical spacing in stack */
 
-      /* Box sizing (same template scale) */
-      --boxW: 85px;
-      --boxH: 115px;
-      --boxPad: 8px;
-
-      /* Spacing */
-      --gapX: 8px;
-      --rowGap: 18px;
-
-      /* Typography */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
-
-      /* Y centers for each row inside .flow (used for lines/brackets) */
-      --y1: calc(8px + (var(--boxH) / 2));
-      --y2: calc(8px + var(--boxH) + var(--rowGap) + (var(--boxH) / 2));
-      --y3: calc(8px + (var(--boxH) * 2) + (var(--rowGap) * 2) + (var(--boxH) / 2));
-
-      /* X anchors for columns (grid math) */
-      --col1Start: 0px;
-      --col2Start: calc(var(--boxW) + var(--gapX));
-      --col3Start: calc((var(--boxW) * 2) + (var(--gapX) * 2));
-      --col4Start: calc((var(--boxW) * 3) + (var(--gapX) * 3));
-      --col5Start: calc((var(--boxW) * 4) + (var(--gapX) * 4));
-
-      --col1Right: calc(var(--col1Start) + var(--boxW));
-      --col2Right: calc(var(--col2Start) + var(--boxW));
-      --col3Right: calc(var(--col3Start) + var(--boxW));
-
-      /* Bracket geometry */
-      --bracketOffset: 6px; /* distance from box edge to bracket spine */
-      --armLen: 10px;       /* bracket arm length */
+      /* computed (fallback) */
+      --box:90px;    /* JS will compute smallest uniform square */
+      --flowW:520px; /* JS sets exact width */
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
     }
 
+    /* same top bar positioning/height pattern as your standard template */
     .header{
-      background: var(--navy);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
+      width:var(--flowW);
+      background:var(--navy);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      grid-template-rows: repeat(3, var(--boxH));
-      column-gap: var(--gapX);
-      row-gap: var(--rowGap);
-      align-items: start;
-      padding-top: 8px;
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns: var(--box) var(--gapX) var(--box) var(--gapX) var(--box);
+      grid-template-rows: repeat(3, var(--box));
+      row-gap:var(--gapY);
+      align-items:start;
+      padding-top:6px;
+      box-sizing:border-box;
     }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    /* placement */
+    .b6110{ grid-column:1; grid-row:2; }
+    .b6120{ grid-column:3; grid-row:1; }
+    .b6130{ grid-column:3; grid-row:2; }
+    .b6140{ grid-column:3; grid-row:3; }
+    .b6150{ grid-column:5; grid-row:2; }
+
+    a.box{
+      display:block;
+      width:var(--box);
+      height:var(--box);
+      border:2px solid var(--navy);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      line-height:1.15;
+      position:relative;
+      overflow:hidden;
+      outline:none;
+      cursor:pointer;
+      z-index:2;
+      transition:background-color 120ms ease, transform 80ms ease;
+    }
+
+    /* hover: lighten inside */
+    a.box:hover{ background:rgba(11,42,102,.08); }
+    a.box:active{
+      transform:scale(.99);
+      background:rgba(11,42,102,.12);
+    }
+
+    a.box:focus-visible{
+      box-shadow:0 0 0 3px rgba(11,42,102,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 5px 0;
-      color: var(--navy);
+      font-size:var(--stepFont);
+      font-weight:700;
+      margin:0 0 5px 0;
+      color:var(--navy);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      font-size:var(--textFont);
+      margin:0;
+      white-space:nowrap;
     }
 
-    /* Placement (matches screenshot structure) */
-    .b6110{ grid-column: 1; grid-row: 2; }
-
-    .b6120{ grid-column: 2; grid-row: 1; }
-    .b6130{ grid-column: 2; grid-row: 2; }
-    .b6140{ grid-column: 2; grid-row: 3; }
-
-    .b6150{ grid-column: 3; grid-row: 2; }
-
-    /* connector primitives */
-    .h-line, .v-line{
-      position: absolute;
-      background: var(--line);
-      pointer-events: none;
-      z-index: 1;
+    /* click ripple */
+    a.box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(11,42,102,.22);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
     }
-    .h-line{ height: 2px; }
-    .v-line{ width: 2px; }
-
-    /* Horizontal line: 6110 -> bracket -> 6130 -> 6150 */
-    .h12{
-      left: var(--col1Right);
-      top: var(--y2);
-      width: var(--gapX);
-    }
-    .h23{
-      left: var(--col2Right);
-      top: var(--y2);
-      width: var(--gapX);
+    a.box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
 
-    /* Clean bracket around the stacked column (6120/6130/6140)
-       bracket on LEFT side of column 2 stack */
-    .c-spine{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y1);
-      height: calc(var(--y3) - var(--y1));
+    /* SVG overlay for brackets + connector lines */
+    .wires{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
     }
-    .c-arm-top{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y1);
-      width: var(--armLen);
-    }
-    .c-arm-bot{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y3);
-      width: var(--armLen);
-    }
-
-    /* Join from 6110 into bracket spine */
-    .c-join{
-      left: calc(var(--col1Right) + var(--gapX));
-      top: var(--y2);
-      width: calc(var(--col2Start) - (var(--col1Right) + var(--gapX)) - var(--bracketOffset));
-    }
-
-    /* Join from bracket to 6150 (from 6130 box right edge to col3 start)
-       NOTE: we already draw h23 between col2 and col3 as the gap line;
-       this is enough visually per your template style.
-    */
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Mobilize Program</div>
+    <div class="header" id="hdr">Mobilize Program</div>
 
-    <div class="flow">
-      <!-- Boxes (clickable; links added later) -->
-      <a class="box-link b6110" href="#" target="_blank" rel="noopener noreferrer">
+    <div class="flow" id="flow">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
+
+      <a class="box b6110" id="b6110"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6110--Establish-Integration-Office-Mana.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6110</div>
         <div class="text">
           Establish<br/>
@@ -198,7 +167,9 @@
         </div>
       </a>
 
-      <a class="box-link b6120" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6120" id="b6120"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6120-.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6120</div>
         <div class="text">
           Implement<br/>
@@ -207,54 +178,190 @@
         </div>
       </a>
 
-      <a class="box-link b6130" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6130" id="b6130"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6130--Implement-Weekly-Cadence.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6130</div>
         <div class="text">
           Implement<br/>
           Weekly<br/>
-          Meeting<br/>
           Cadence
         </div>
       </a>
 
-      <a class="box-link b6140" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6140" id="b6140"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6140--Obtain-&-Deploy-Budget-Resources.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6140</div>
         <div class="text">
           Obtain &amp;<br/>
           Deploy<br/>
-          Budget &amp;<br/>
+          Budget<br/>
           Resources
         </div>
       </a>
 
-      <a class="box-link b6150" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="box b6150" id="b6150"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6150-Conduct-Orientation-&-Training.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">6150</div>
         <div class="text">
           Conduct<br/>
-          Orientation &amp;<br/>
-          Training
+          Orientation<br/>
+          &amp; Training
         </div>
       </a>
-
-      <!-- Connector lines -->
-      <div class="h-line h12"></div>
-
-      <!-- Clean bracket + join -->
-      <div class="h-line c-join"></div>
-      <div class="v-line c-spine"></div>
-      <div class="h-line c-arm-top"></div>
-      <div class="h-line c-arm-bot"></div>
-
-      <!-- col2 -> col3 gap line -->
-      <div class="h-line h23"></div>
     </div>
   </div>
 
   <script>
-    /* optional: prevent # jump while prototyping */
-    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
-      a.addEventListener('click', e => e.preventDefault());
-    });
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const svg = document.getElementById("wires");
+      const header = document.getElementById("hdr");
+
+      const boxes = [...document.querySelectorAll("a.box")];
+      const b6110 = document.getElementById("b6110");
+      const b6120 = document.getElementById("b6120");
+      const b6130 = document.getElementById("b6130");
+      const b6140 = document.getElementById("b6140");
+      const b6150 = document.getElementById("b6150");
+
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function relRect(el) {
+        const fr = flow.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return {
+          left: r.left - fr.left,
+          top: r.top - fr.top,
+          right: r.right - fr.left,
+          bottom: r.bottom - fr.top,
+          width: r.width,
+          height: r.height
+        };
+      }
+
+      function fitSquareSize() {
+        // Smallest uniform square that fits the largest box content.
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          maxW = Math.max(maxW, r.width);
+          maxH = Math.max(maxH, r.height);
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        setVar("--box", size + "px");
+
+        const gapX = parseFloat(getComputedStyle(root).getPropertyValue("--gapX")) || 28;
+        const flowW = (size * 3) + (gapX * 2);
+        setVar("--flowW", flowW + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function drawWires() {
+        const fr = flow.getBoundingClientRect();
+        svg.setAttribute("viewBox", `0 0 ${fr.width} ${fr.height}`);
+        svg.setAttribute("width", fr.width);
+        svg.setAttribute("height", fr.height);
+
+        header.style.width = fr.width + "px";
+
+        const r6110 = relRect(b6110);
+        const r6120 = relRect(b6120);
+        const r6140 = relRect(b6140);
+        const r6130 = relRect(b6130);
+        const r6150 = relRect(b6150);
+
+        const stroke = getComputedStyle(root).getPropertyValue("--navy").trim() || "#0b2a66";
+
+        // stack bounds (6120..6140)
+        const yTop = r6120.top + 6;
+        const yBot = r6140.bottom - 6;
+
+        // midlines
+        const y6110 = r6110.top + (r6110.height / 2);
+        const y6150 = r6150.top + (r6150.height / 2);
+
+        // bracket geometry
+        const bracketInset = 10;
+        const tick = 10;
+
+        const xStackLeft = r6120.left;
+        const xStackRight = r6120.right;
+
+        const xBracketL = xStackLeft - bracketInset;
+        const xBracketR = xStackRight + bracketInset;
+
+        // connectors
+        const x6110Right = r6110.right;
+        const x6150Left = r6150.left;
+
+        svg.innerHTML = `
+          <g fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="square">
+            <!-- LEFT bracket (6120..6140) -->
+            <path d="
+              M ${xBracketL + tick} ${yTop}
+              H ${xBracketL}
+              V ${yBot}
+              H ${xBracketL + tick}
+            "/>
+
+            <!-- RIGHT bracket (6120..6140) -->
+            <path d="
+              M ${xBracketR - tick} ${yTop}
+              H ${xBracketR}
+              V ${yBot}
+              H ${xBracketR - tick}
+            "/>
+
+            <!-- 6110 -> LEFT bracket -->
+            <path d="M ${x6110Right} ${y6110} H ${xBracketL}"/>
+
+            <!-- RIGHT bracket -> 6150 (horizontal to center of 6150) -->
+            <path d="M ${xBracketR} ${y6150} H ${x6150Left}"/>
+          </g>
+        `;
+      }
+
+      function enableRipple() {
+        boxes.forEach(box => {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        });
+      }
+
+      function layout() {
+        fitSquareSize();
+        requestAnimationFrame(drawWires);
+      }
+
+      window.addEventListener("load", () => {
+        enableRipple();
+        layout();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__layoutT);
+        window.__layoutT = setTimeout(layout, 80);
+      });
+    })();
   </script>
 </body>
 </html>
+
+
