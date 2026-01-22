@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,112 +8,142 @@
   <style>
     :root{
       /* Red used everywhere */
-      --red: #c00000;
+      --red:#c00000;
 
-      --border: 3px solid var(--red);
-      --line: var(--red);
+      /* Match “first template” typography */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
 
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
+      /* Match “first template” spacing behavior */
+      --gapX:10px;
+      --boxPad:8px;
 
-      /* Box sizing */
-      --boxW: 90px;
-      --boxH: 110px;
-      --boxPad: 10px;
-
-      /* Spacing */
-      --gapX: 12px;
-
-      /* Typography (STANDARD across all pages) */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
-
-      /* Layout helpers */
-      --flowTopPad: 10px;
-      --rowCenterY: calc(var(--flowTopPad) + (var(--boxH) / 2));
+      /* Computed (fallbacks if JS blocked) */
+      --box:110px;
+      --flowW:470px;
+      --yMid:55px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
+    /* Same positioning model as your first template */
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #fff;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
     }
 
+    /* Header only as wide as the boxes span */
     .header{
-      background: var(--red);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width:var(--flowW);
+      background:var(--red);
+      color:#fff;
+      padding:6px 12px;             /* first-template height */
+      font-size:var(--headerFont);
+      font-weight:700;
+      margin-bottom:14px;           /* first-template spacing */
+      box-sizing:border-box;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(4, var(--boxW));
-      column-gap: var(--gapX);
-      align-items: start;
-      padding-top: var(--flowTopPad);
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(4,var(--box));
+      column-gap:var(--gapX);
+      align-items:start;
+      padding-top:6px;              /* first-template row position */
     }
 
-    .box{
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    .box-link{
+      display:block;
+      width:var(--box);
+      height:var(--box);            /* perfect square */
+      border:2px solid var(--red);
+      padding:var(--boxPad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      line-height:1.15;
+      position:relative;
+      z-index:2;
+      overflow:hidden;              /* ripple stays inside */
+      outline:none;
+      cursor:pointer;
+      transition:background-color 120ms ease, transform 80ms ease;
+    }
+
+    /* Hover lightens inside */
+    .box-link:hover{ background:rgba(192,0,0,.08); }
+    .box-link:active{
+      transform:scale(.99);
+      background:rgba(192,0,0,.12);
+    }
+
+    .box-link:focus-visible{
+      box-shadow:0 0 0 3px rgba(192,0,0,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 400;
-      margin: 0 0 6px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      margin:0 0 5px 0;
+      color:var(--red);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
-      overflow-wrap: anywhere;
+      font-size:var(--textFont);
+      font-weight:400;
+      margin:0;
+      white-space:nowrap;           /* no mid-word wrapping */
     }
 
     /* Straight connector lines */
     .h-line{
-      position: absolute;
-      height: 2px;
-      background: var(--line);
-      top: var(--rowCenterY);
-      pointer-events: none;
-      z-index: 1;
+      position:absolute;
+      height:2px;
+      background:var(--red);
+      top:var(--yMid);
+      pointer-events:none;
+      z-index:1;
     }
 
-    .h12{ left: calc(var(--boxW)); width: var(--gapX); }
-    .h23{ left: calc((var(--boxW) * 2) + var(--gapX)); width: var(--gapX); }
-    .h34{ left: calc((var(--boxW) * 3) + (var(--gapX) * 2)); width: var(--gapX); }
+    .h12{ left:var(--box); width:var(--gapX); }
+    .h23{ left:calc((var(--box) * 2) + var(--gapX)); width:var(--gapX); }
+    .h34{ left:calc((var(--box) * 3) + (var(--gapX) * 2)); width:var(--gapX); }
+
+    /* Click ripple */
+    .box-link::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(192,0,0,.25);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    .box-link.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{ opacity:.9; transform:translate(-50%,-50%) scale(1); }
+      100%{ opacity:0; transform:translate(-50%,-50%) scale(18); }
+    }
   </style>
 </head>
 
@@ -121,8 +151,10 @@
   <div class="frame">
     <div class="header">Synergies Realization</div>
 
-    <div class="flow">
-      <div class="box">
+    <div class="flow" id="flow">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-5120--Formulate-Capture-&-Reporting-Processes.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5210</div>
         <div class="text">
           Formulate<br/>
@@ -130,27 +162,33 @@
           Reporting<br/>
           Processes
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-5220--Capture-Cost-%26-Revenue-Synergies.aspx?csf=1&web=1&e=3Ma9F3"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5220</div>
         <div class="text">
           Capture Cost<br/>
           &amp; Revenue<br/>
           Synergies
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-5230--Validate-&-Highlight-Gaps.aspx"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5230</div>
         <div class="text">
           Validate &amp;<br/>
           Highlight<br/>
           Gaps
         </div>
-      </div>
+      </a>
 
-      <div class="box">
+      <a class="box-link"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-5240-.aspx?csf=1&web=1&e=wi439k"
+         target="_blank" rel="noopener noreferrer">
         <div class="step">5240</div>
         <div class="text">
           Report<br/>
@@ -158,13 +196,71 @@
           Leadership<br/>
           and Board
         </div>
-      </div>
+      </a>
 
       <!-- connector lines -->
-      <div class="h-line h12"></div>
-      <div class="h-line h23"></div>
-      <div class="h-line h34"></div>
+      <div class="h-line h12" aria-hidden="true"></div>
+      <div class="h-line h23" aria-hidden="true"></div>
+      <div class="h-line h34" aria-hidden="true"></div>
     </div>
   </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const boxes = [...document.querySelectorAll(".box-link")];
+
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function fitSquaresAndWidth(){
+        // Smallest uniform square that fits the largest box content (first-template behavior).
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes){
+          const r = b.getBoundingClientRect();
+          if (r.width > maxW) maxW = r.width;
+          if (r.height > maxH) maxH = r.height;
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gapX = parseFloat(getComputedStyle(root).getPropertyValue("--gapX")) || 10;
+
+        setVar("--box", size + "px");
+        setVar("--flowW", ((size * 4) + (gapX * 3)) + "px");
+        setVar("--yMid", Math.round(size / 2) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function enableRipple(){
+        for (const box of boxes){
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        }
+      }
+
+      window.addEventListener("load", () => {
+        fitSquaresAndWidth();
+        enableRipple();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__fitT);
+        window.__fitT = setTimeout(fitSquaresAndWidth, 80);
+      });
+    })();
+  </script>
 </body>
 </html>
+
