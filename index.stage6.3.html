@@ -1,250 +1,339 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Manage Program</title>
 
   <style>
     :root{
-      /* Navy theme */
-      --navy: #0b2a66;
+      --navy:#0b2a66;
 
-      --line: var(--navy);
-      --border: 2px solid var(--navy);
-
-      /* Fixed viewport */
-      --frameW: 500px;
-      --frameH: 500px;
-
-      /* Adjusted so all 4 stacked boxes fit */
-      --boxW: 85px;
-      --boxH: 92px;
-      --boxPad: 7px;
+      /* Smaller square boxes (all identical) */
+      --box:90px;
 
       /* Spacing */
-      --gapX: 8px;
-      --rowGap: 10px;
+      --gapY:10px;
+      --pad:6px;
 
-      /* Typography */
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.2px;
+      /* Layout spacing for brackets + branch */
+      --leftPad:18px;   /* room for left bracket */
+      --rightPad:18px;  /* room for right bracket */
+      --branchGap:34px; /* space between right bracket and 6250 */
 
-      /* Y centers for each row inside .flow */
-      --y1: calc(8px + (var(--boxH) / 2));
-      --y2: calc(8px + var(--boxH) + var(--rowGap) + (var(--boxH) / 2));
-      --y3: calc(8px + (var(--boxH) * 2) + (var(--rowGap) * 2) + (var(--boxH) / 2));
-      --y4: calc(8px + (var(--boxH) * 3) + (var(--rowGap) * 3) + (var(--boxH) / 2));
-
-      /* X anchors for columns */
-      --col1Start: 0px;
-      --col2Start: calc(var(--boxW) + var(--gapX));
-      --col3Start: calc((var(--boxW) * 2) + (var(--gapX) * 2));
-      --col4Start: calc((var(--boxW) * 3) + (var(--gapX) * 3));
-      --col5Start: calc((var(--boxW) * 4) + (var(--gapX) * 4));
-
-      --col2Right: calc(var(--col2Start) + var(--boxW));
-
-      /* Bracket geometry */
-      --bracketOffset: 6px;
-      --armLen: 10px;
+      /* Original template typography */
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #000;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
     }
 
+    /* Same bar positioning/height pattern as your template */
     .header{
-      background: var(--navy);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 18px;
+      background:var(--navy);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      width:fit-content; /* JS sets exact width */
     }
 
+    /* Diagram container */
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, var(--boxW));
-      grid-template-rows: repeat(4, var(--boxH));
-      column-gap: var(--gapX);
-      row-gap: var(--rowGap);
-      align-items: start;
-      padding-top: 8px;
+      position:relative;
+      display:grid;
+      grid-template-columns: var(--leftPad) var(--box) var(--rightPad) var(--branchGap) var(--box);
+      align-items:start;
+      column-gap:0;
+      box-sizing:border-box;
     }
 
-    /* Clickable box */
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      background: #fff;
-      text-decoration: none;
-      color: inherit;
-      line-height: 1.15;
-      position: relative;
-      z-index: 2;
+    .stack{
+      grid-column:2;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gapY);
+      position:relative;
+      z-index:2;
+    }
+
+    .endbox{
+      grid-column:5;
+      align-self:center; /* keep centered relative to stack */
+      position:relative;
+      z-index:2;
+    }
+
+    a.box{
+      display:block;
+      width:var(--box);
+      height:var(--box);
+      border:2px solid var(--navy);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;              /* ripple stays inside */
+      transition:background-color 120ms ease, transform 80ms ease;
+      outline:none;
+      line-height:1.15;
+    }
+
+    /* Hover = lighter inside (navy tint) */
+    a.box:hover{ background:rgba(11,42,102,.08); }
+    a.box:active{
+      transform:scale(.99);
+      background:rgba(11,42,102,.12);
+    }
+
+    a.box:focus-visible{
+      box-shadow:0 0 0 3px rgba(11,42,102,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin: 0 0 4px 0;
-      color: var(--navy);
+      margin:0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      color:var(--navy);
+      white-space:nowrap;
     }
 
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
-      margin: 0;
+      margin:0;
+      font-size:var(--textFont);
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    /* Placement */
-    .b6210{ grid-column: 2; grid-row: 1; }
-    .b6220{ grid-column: 2; grid-row: 2; }
-    .b6230{ grid-column: 2; grid-row: 3; }
-    .b6240{ grid-column: 2; grid-row: 4; }
-
-    /* ✅ 6250 moved slightly LEFT so it doesn't collide with bracket line */
-    .b6250{
-      grid-column: 3;
-      grid-row: 2;
-      transform: translateX(-6px);
+    /* Click ripple */
+    a.box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(11,42,102,.22);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    a.box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
 
-    /* connector primitives */
-    .h-line, .v-line{
-      position: absolute;
-      background: var(--line);
-      pointer-events: none;
-      z-index: 1;
-    }
-    .h-line{ height: 2px; }
-    .v-line{ width: 2px; }
-
-    /* Left bracket */
-    .lb-spine{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y1);
-      height: calc(var(--y4) - var(--y1));
-    }
-    .lb-arm-top{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y1);
-      width: var(--armLen);
-    }
-    .lb-arm-bot{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y4);
-      width: var(--armLen);
-    }
-
-    /* Right bracket */
-    .rb-spine{
-      left: calc(var(--col2Right) + var(--bracketOffset));
-      top: var(--y1);
-      height: calc(var(--y4) - var(--y1));
-    }
-    .rb-arm-top{
-      left: calc(var(--col2Right) + var(--bracketOffset) - var(--armLen));
-      top: var(--y1);
-      width: var(--armLen);
-    }
-    .rb-arm-bot{
-      left: calc(var(--col2Right) + var(--bracketOffset) - var(--armLen));
-      top: var(--y4);
-      width: var(--armLen);
-    }
-
-    /* Connector to 6250 from row 2 */
-    .to6250{
-      left: var(--col2Right);
-      top: var(--y2);
-      width: var(--gapX);
-    }
-
-    /* Tiny join mark into left bracket (optional, matches diagram vibe) */
-    .lb-join{
-      left: calc(var(--col2Start) - var(--bracketOffset));
-      top: var(--y2);
-      width: var(--armLen);
-      opacity: .9;
+    /* SVG overlay for brackets/lines */
+    .wires{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
     }
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Manage Program</div>
+    <div class="header" id="hdr">Manage Program</div>
 
-    <div class="flow">
-      <a class="box-link b6210" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="step">6210</div>
-        <div class="text">Execute<br/>Management<br/>Processes</div>
-      </a>
+    <div class="flow" id="flow">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
 
-      <a class="box-link b6220" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="step">6220</div>
-        <div class="text">Operate<br/>Integration<br/>Management<br/>Office (IMO)</div>
-      </a>
+      <div class="stack" id="stack">
+        <a class="box" id="b6210"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6210-.aspx"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">6210</div>
+          <div class="text">
+            Execute<br/>
+            Program<br/>
+            Management
+          </div>
+        </a>
 
-      <a class="box-link b6230" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="step">6230</div>
-        <div class="text">Monitor<br/>Program<br/>Performance</div>
-      </a>
+        <a class="box" id="b6220"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6111--Operate-Integration-Management-Office-(IMO).aspx"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">6220</div>
+          <div class="text">
+            Operate<br/>
+            IMO
+          </div>
+        </a>
 
-      <a class="box-link b6240" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="step">6240</div>
-        <div class="text">Conduct<br/>SteerCo<br/>Meetings</div>
-      </a>
+        <a class="box" id="b6230"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6230--Monitor-Program-Preformance.aspx"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">6230</div>
+          <div class="text">
+            Monitor<br/>
+            Program<br/>
+            Performance
+          </div>
+        </a>
 
-      <a class="box-link b6250" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="step">6250</div>
-        <div class="text">Conduct<br/>Program<br/>Closeout</div>
-      </a>
+        <a class="box" id="b6240"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6240--Conduct-SteerCo-Meetings.aspx"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">6240</div>
+          <div class="text">
+            Conduct<br/>
+            SteerCo<br/>
+            Meetings
+          </div>
+        </a>
+      </div>
 
-      <!-- brackets -->
-      <div class="v-line lb-spine"></div>
-      <div class="h-line lb-arm-top"></div>
-      <div class="h-line lb-arm-bot"></div>
-
-      <div class="v-line rb-spine"></div>
-      <div class="h-line rb-arm-top"></div>
-      <div class="h-line rb-arm-bot"></div>
-
-      <!-- connector -->
-      <div class="h-line to6250"></div>
-
-      <!-- tiny join mark -->
-      <div class="h-line lb-join"></div>
+      <div class="endbox">
+        <a class="box" id="b6250"
+           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-6250-.aspx"
+           target="_blank" rel="noopener noreferrer">
+          <div class="step">6250</div>
+          <div class="text">
+            Program<br/>
+            Closeout
+          </div>
+        </a>
+      </div>
     </div>
   </div>
 
   <script>
-    /* optional: prevent # jump while prototyping */
-    document.querySelectorAll('a.box-link[href="#"]').forEach(a=>{
-      a.addEventListener('click', e => e.preventDefault());
-    });
+    (() => {
+      const flow = document.getElementById("flow");
+      const svg = document.getElementById("wires");
+      const header = document.getElementById("hdr");
+
+      const stackTop = document.getElementById("b6210");
+      const stackBottom = document.getElementById("b6240");
+      const endBox = document.getElementById("b6250");
+
+      const boxes = [...document.querySelectorAll("a.box")];
+
+      function relRect(el) {
+        const fr = flow.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return {
+          left: r.left - fr.left,
+          top: r.top - fr.top,
+          right: r.right - fr.left,
+          bottom: r.bottom - fr.top,
+          width: r.width,
+          height: r.height
+        };
+      }
+
+      function draw() {
+        const fr = flow.getBoundingClientRect();
+        svg.setAttribute("viewBox", `0 0 ${fr.width} ${fr.height}`);
+        svg.setAttribute("width", fr.width);
+        svg.setAttribute("height", fr.height);
+
+        header.style.width = fr.width + "px";
+
+        const t = relRect(stackTop);
+        const b = relRect(stackBottom);
+        const e = relRect(endBox);
+
+        const yTop = t.top + 6;
+        const yBot = b.bottom - 6;
+
+        const xStackLeft = t.left;
+        const xStackRight = t.right;
+
+        // Bracket geometry
+        const bracketInset = 10;
+        const tick = 10;
+
+        const xL = xStackLeft - bracketInset;
+        const xR = xStackRight + bracketInset;
+
+        // Center of 6250 (this is what we want the branch line to hit)
+        const yEndMid = e.top + (e.height / 2);
+        const xEndLeft = e.left;
+
+        const stroke = getComputedStyle(document.documentElement)
+          .getPropertyValue("--navy").trim() || "#0b2a66";
+
+        svg.innerHTML = `
+          <g fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="square">
+            <!-- Left bracket -->
+            <path d="
+              M ${xL + tick} ${yTop}
+              H ${xL}
+              V ${yBot}
+              H ${xL + tick}
+            "/>
+
+            <!-- Right bracket -->
+            <path d="
+              M ${xR - tick} ${yTop}
+              H ${xR}
+              V ${yBot}
+              H ${xR - tick}
+            "/>
+
+            <!-- Branch line moved DOWN to hit the center of 6250 -->
+            <path d="
+              M ${xR} ${yEndMid}
+              H ${xEndLeft}
+            "/>
+          </g>
+        `;
+      }
+
+      function enableRipple() {
+        boxes.forEach(box => {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        });
+      }
+
+      window.addEventListener("load", () => {
+        enableRipple();
+        draw();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__wireT);
+        window.__wireT = setTimeout(draw, 80);
+      });
+    })();
   </script>
 </body>
 </html>
+
+
