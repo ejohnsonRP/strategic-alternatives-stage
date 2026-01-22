@@ -7,19 +7,19 @@
 
   <style>
     :root{
-      /* EXACT red color from your reference file */
+      /* Dark red theme */
       --red:#c00000;
 
-      /* first-template style spacing */
+      /* EXACT Stage 7.5 spacing */
       --gap:6px;
       --pad:6px;
 
-      /* computed (fallbacks if JS blocked) */
+      /* computed (fallbacks if JS is blocked) */
       --box:110px;
       --mid:55px;
       --flowW:580px;
 
-      /* first-template font sizing */
+      /* EXACT Stage 7.5 fonts */
       --headerFont:15px;
       --stepFont:11px;
       --textFont:9.2px;
@@ -32,15 +32,16 @@
       color:#000;
     }
 
-    /* same layout model as the first code template */
+    /* Make the "screen" longer: do NOT clamp the container */
     .frame{
       display:inline-block;
       padding:10px;
       box-sizing:border-box;
       background:#fff;
+      /* removed max-width/max-height and overflow:hidden */
     }
 
-    /* bar width matches the boxes */
+    /* Header matches Stage 7.5 (but red theme) */
     .header{
       width:var(--flowW);
       background:var(--red);
@@ -50,9 +51,6 @@
       font-weight:700;
       box-sizing:border-box;
       margin-bottom:14px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
     }
 
     .flow{
@@ -62,7 +60,7 @@
       grid-template-columns:repeat(5,var(--box));
       gap:0 var(--gap);
       align-items:start;
-      padding-top:6px;
+      padding-top:6px; /* exact Stage 7.5 */
     }
 
     .box{
@@ -82,18 +80,17 @@
       z-index:1;
     }
 
-    /* hover lightens inside */
-    .box:hover{ background:rgba(192,0,0,.08); }
+    /* Hover = lighter INSIDE */
+    .box:hover{ background:rgba(139,0,0,.08); }
     .box:active{
       transform:scale(.99);
-      background:rgba(192,0,0,.12);
+      background:rgba(139,0,0,.12);
     }
 
     .box:focus-visible{
-      box-shadow:0 0 0 3px rgba(192,0,0,.25);
+      box-shadow:0 0 0 3px rgba(139,0,0,.25);
     }
 
-    /* step number = red */
     .step{
       margin:0 0 5px 0;
       font-size:var(--stepFont);
@@ -106,10 +103,10 @@
       margin:0;
       font-size:var(--textFont);
       line-height:1.15;
-      white-space:nowrap; /* one word per line stays intact */
+      white-space:nowrap;
     }
 
-    /* connector lines */
+    /* Connector lines */
     .line{
       position:absolute;
       height:2px;
@@ -123,7 +120,7 @@
     .line.l34{ left:calc(var(--box) * 3 + var(--gap) * 2); width:var(--gap); }
     .line.l45{ left:calc(var(--box) * 4 + var(--gap) * 3); width:var(--gap); }
 
-    /* click ripple */
+    /* Click ripple */
     .box::after{
       content:"";
       position:absolute;
@@ -132,7 +129,7 @@
       width:10px;
       height:10px;
       border-radius:999px;
-      background:rgba(192,0,0,.25);
+      background:rgba(139,0,0,.25);
       transform:translate(-50%,-50%) scale(1);
       opacity:0;
       pointer-events:none;
@@ -223,7 +220,7 @@
       const setVar = (k, v) => root.style.setProperty(k, v);
 
       function fitSquares() {
-        // Smallest uniform square that fits the largest box content.
+        // Stage 7.5 behavior: smallest uniform square that fits the largest content.
         const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
         boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
         void flow.offsetWidth;
@@ -272,6 +269,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
