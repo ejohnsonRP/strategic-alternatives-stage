@@ -1,218 +1,336 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Strategic Alternatives</title>
 
   <style>
     :root{
-      --blue: #2f64f5;
-      --line: var(--blue);
-      --border: 2px solid var(--blue);
+      --brand:#2f64f5;
 
-      --frameW: 500px;
-      --frameH: 500px;
+      --headerFont:15px;
+      --stepFont:11px;
+      --textFont:9.2px;
 
-      --boxW: 105px;
-      --boxH: 115px;
-      --boxPad: 8px;
+      --pad:6px;
+      --gapX:28px;
+      --gapY:12px;
 
-      --gapX: 12px;
-      --gapY: 18px;
-      --leftTop: 6px;
-      --stub: 10px;
+      --tick:10px;
+      --edgeRight:28px;
 
-      --headerFont: 17px;
-      --stepFont: 11px;
-      --textFont: 9.5px;
-
-      --mid1: calc(var(--leftTop) + (var(--boxH) / 2));
-      --mid2: calc(var(--mid1) + var(--boxH) + var(--gapY));
-      --midBetween: calc((var(--mid1) + var(--mid2)) / 2);
-
-      --vX: calc(var(--boxW) + var(--stub));
-      --rightOffset: calc(var(--midBetween) - (var(--boxH) / 2));
+      --box:90px;
+      --flowW:560px;
     }
 
     body{
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#fff;
+      color:#000;
     }
 
     .frame{
-      width: var(--frameW);
-      height: var(--frameH);
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      padding: 10px;
-      box-sizing: border-box;
+      display:inline-block;
+      padding:10px;
+      box-sizing:border-box;
+      background:#fff;
+      overflow:visible;
     }
 
     .header{
-      background: var(--blue);
-      color: #fff;
-      padding: 8px 12px;
-      font-size: var(--headerFont);
-      font-weight: 700;
-      margin-bottom: 12px;
+      width:var(--flowW);
+      background:var(--brand);
+      color:#fff;
+      padding:6px 12px;
+      font-size:var(--headerFont);
+      font-weight:700;
+      box-sizing:border-box;
+      margin-bottom:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .flow{
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(4, var(--boxW));
-      column-gap: var(--gapX);
+      position:relative;
+      width:var(--flowW);
+      display:grid;
+      grid-template-columns:repeat(5,var(--box));
+      grid-template-rows:repeat(3,var(--box));
+      column-gap:var(--gapX);
+      row-gap:var(--gapY);
+      align-items:start;
+      padding-top:6px;
+
+      padding-right:var(--edgeRight);
+      box-sizing:border-box;
     }
 
-    .left{
-      grid-column: 1;
-      position: relative;
-      display: grid;
-      row-gap: var(--gapY);
-      padding-top: var(--leftTop);
+    /* placement to match image */
+    .b1010{ grid-column:1; grid-row:1; }
+    .b1020{ grid-column:1; grid-row:3; }
+    .b1030{ grid-column:2; grid-row:2; }
+    .b1040{ grid-column:3; grid-row:2; }
+    .b1050{ grid-column:4; grid-row:2; }
+
+    a.box{
+      display:block;
+      width:var(--box);
+      height:var(--box);
+      border:2px solid var(--brand);
+      padding:var(--pad);
+      box-sizing:border-box;
+      background:#fff;
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      outline:none;
+      z-index:2;
+      line-height:1.15;
+      transition:background-color 120ms ease, transform 80ms ease;
     }
 
-    .step1030{ grid-column: 2; padding-top: var(--rightOffset); }
-    .step1040{ grid-column: 3; padding-top: var(--rightOffset); }
-    .step1050{ grid-column: 4; padding-top: var(--rightOffset); }
+    a.box:hover{ background:rgba(47,100,245,.10); }
+    a.box:active{ transform:scale(.99); background:rgba(47,100,245,.16); }
 
-    .box-link{
-      display: block;
-      width: var(--boxW);
-      height: var(--boxH);
-      border: var(--border);
-      padding: var(--boxPad);
-      box-sizing: border-box;
-      text-decoration: none;
-      color: #000;
-      line-height: 1.15;
-      background: #fff;
+    a.box:focus-visible{
+      box-shadow:0 0 0 3px rgba(47,100,245,.25);
     }
 
     .step{
-      font-size: var(--stepFont);
-      font-weight: 700;
-      margin-bottom: 5px;
+      margin:0 0 5px 0;
+      font-size:var(--stepFont);
+      font-weight:700;
+      color:var(--brand);
+      white-space:nowrap;
     }
-
     .text{
-      font-size: var(--textFont);
-      font-weight: 400;
+      margin:0;
+      font-size:var(--textFont);
+      line-height:1.15;
+      white-space:nowrap;
     }
 
-    .v-line{
-      position: absolute;
-      left: calc(var(--vX) - 1px);
-      top: var(--mid1);
-      height: calc(var(--mid2) - var(--mid1));
-      width: 2px;
-      background: var(--line);
+    a.box::after{
+      content:"";
+      position:absolute;
+      left:var(--rx,50%);
+      top:var(--ry,50%);
+      width:10px; height:10px;
+      border-radius:999px;
+      background:rgba(47,100,245,.28);
+      transform:translate(-50%,-50%) scale(1);
+      opacity:0;
+      pointer-events:none;
+    }
+    a.box.ripple::after{ animation:ripple 520ms ease-out; }
+    @keyframes ripple{
+      0%{opacity:.9; transform:translate(-50%,-50%) scale(1);}
+      100%{opacity:0; transform:translate(-50%,-50%) scale(18);}
     }
 
-    .left-h{
-      position: absolute;
-      left: var(--boxW);
-      width: calc(var(--stub) + 1px);
-      height: 2px;
-      background: var(--line);
+    .wires{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
     }
-    .left-h.top{ top: var(--mid1); }
-    .left-h.bottom{ top: var(--mid2); }
-
-    .h-line{
-      position: absolute;
-      top: var(--midBetween);
-      height: 2px;
-      background: var(--line);
-    }
-
-    .h1{
-      left: calc(var(--vX) - 1px);
-      width: calc(var(--gapX) - var(--stub) + 1px);
-    }
-
-    .h2{
-      left: calc((var(--boxW) * 2 + var(--gapX)) - 1px);
-      width: calc(var(--gapX) + 1px);
-    }
-
-    .h3{
-      left: calc((var(--boxW) * 3 + var(--gapX) * 2) - 1px);
-      width: calc(var(--gapX) + 1px);
-    }
-    /* Make connector lines visually present but not clickable */
-  .v-line,
-  .h-line,
-  .left-h {
-  pointer-events: none;
-  }
   </style>
 </head>
 
 <body>
   <div class="frame">
-    <div class="header">Strategic Alternatives</div>
+    <div class="header" id="hdr">Strategic Alternatives</div>
 
-    <div class="flow">
-      <div class="left">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/1010-Develop.aspx?web=1"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1010</div>
-          <div class="text">Develop<br/>Acquisition<br/>Objectives &amp;<br/>Rationale</div>
-        </a>
+    <div class="flow" id="flow">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
 
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1020.aspx?web=1"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1020</div>
-          <div class="text">Assess<br/>Current<br/>Position &amp;<br/>Gaps</div>
-        </a>
+      <!-- 1010 -->
+      <a class="box b1010" id="b1010"
+         href="REPLACE_WITH_1010_LINK"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1010</div>
+        <div class="text">Develop<br/>Acquisition<br/>Objectives &amp;<br/>Rationale</div>
+      </a>
 
-        <div class="v-line"></div>
-        <div class="left-h top"></div>
-        <div class="left-h bottom"></div>
-      </div>
+      <!-- 1020 (as provided) -->
+      <a class="box b1020" id="b1020"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1030-.aspx?csf=1&web=1&e=RbcfxD"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1020</div>
+        <div class="text">Assess<br/>Current<br/>Position &amp;<br/>Gaps</div>
+      </a>
 
-      <div class="step1030">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1030-.aspx?web=1"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1030</div>
-          <div class="text">Develop &amp;<br/>Consider<br/>Alternative<br/>Scenarios</div>
-        </a>
-      </div>
+      <!-- 1030 -->
+      <a class="box b1030" id="b1030"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1030-.aspx?csf=1&web=1&e=RbcfxD"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1030</div>
+        <div class="text">Develop &amp;<br/>Consider<br/>Alternative<br/>Scenarios</div>
+      </a>
 
-      <div class="step1040">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1040-.aspx?web=1"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1040</div>
-          <div class="text">Draft the<br/>Acquisition<br/>Plan</div>
-        </a>
-      </div>
+      <!-- 1040 -->
+      <a class="box b1040" id="b1040"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1040-.aspx?csf=1&web=1&e=Lb0JAp"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1040</div>
+        <div class="text">Draft the<br/>Acquisition<br/>Plan</div>
+      </a>
 
-      <div class="step1050">
-        <a class="box-link"
-           href="https://rgpcom.sharepoint.com/sites/ThePoint2/SitePages/Task-Package-1050--Assemble-the-Team.aspx?web=1"
-           target="_blank" rel="noopener noreferrer">
-          <div class="step">1050</div>
-          <div class="text">Assemble<br/>the Team</div>
-        </a>
-      </div>
-
-      <div class="h-line h1"></div>
-      <div class="h-line h2"></div>
-      <div class="h-line h3"></div>
+      <!-- 1050 -->
+      <a class="box b1050" id="b1050"
+         href="https://rgpcom.sharepoint.com/:u:/r/sites/ThePoint2/SitePages/Task-Package-1050--Assemble-the-Team.aspx?csf=1&web=1&e=lu5PIl"
+         target="_blank" rel="noopener noreferrer">
+        <div class="step">1050</div>
+        <div class="text">Assemble<br/>the Team</div>
+      </a>
     </div>
   </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const flow = document.getElementById("flow");
+      const svg = document.getElementById("wires");
+      const header = document.getElementById("hdr");
+
+      const boxes = [...document.querySelectorAll("a.box")];
+
+      const b1010 = document.getElementById("b1010");
+      const b1020 = document.getElementById("b1020");
+      const b1030 = document.getElementById("b1030");
+      const b1040 = document.getElementById("b1040");
+      const b1050 = document.getElementById("b1050");
+
+      const setVar = (k, v) => root.style.setProperty(k, v);
+
+      function relRect(el) {
+        const fr = flow.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return {
+          left: r.left - fr.left,
+          top: r.top - fr.top,
+          right: r.right - fr.left,
+          bottom: r.bottom - fr.top,
+          width: r.width,
+          height: r.height
+        };
+      }
+
+      function fitSquares() {
+        const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
+        boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
+        void flow.offsetWidth;
+
+        let maxW = 0, maxH = 0;
+        for (const b of boxes) {
+          const r = b.getBoundingClientRect();
+          maxW = Math.max(maxW, r.width);
+          maxH = Math.max(maxH, r.height);
+        }
+
+        const size = Math.ceil(Math.max(maxW, maxH));
+        const gapX = parseFloat(getComputedStyle(root).getPropertyValue("--gapX")) || 28;
+        const edgeRight = parseFloat(getComputedStyle(root).getPropertyValue("--edgeRight")) || 28;
+
+        setVar("--box", size + "px");
+        setVar("--flowW", ((size * 5) + (gapX * 4) + edgeRight) + "px");
+
+        boxes.forEach((b, i) => { b.style.width = prev[i].w; b.style.height = prev[i].h; });
+      }
+
+      function drawWires() {
+        const fr = flow.getBoundingClientRect();
+        svg.setAttribute("viewBox", `0 0 ${fr.width} ${fr.height}`);
+        svg.setAttribute("width", fr.width);
+        svg.setAttribute("height", fr.height);
+        header.style.width = fr.width + "px";
+
+        const r1010 = relRect(b1010);
+        const r1020 = relRect(b1020);
+        const r1030 = relRect(b1030);
+        const r1040 = relRect(b1040);
+        const r1050 = relRect(b1050);
+
+        const stroke = getComputedStyle(root).getPropertyValue("--brand").trim() || "#2f64f5";
+        const tick = parseFloat(getComputedStyle(root).getPropertyValue("--tick")) || 10;
+
+        const clear = 12;
+        const linePad = 6;
+
+        const y1010 = r1010.top + (r1010.height / 2);
+        const y1020 = r1020.top + (r1020.height / 2);
+        const yMid  = r1030.top + (r1030.height / 2);
+
+        // bracket placed in the gap between col1 and col2
+        const xBracket = r1030.left - clear;
+
+        // ✅ bracket spans exactly from 1010 center to 1020 center
+        const yTop = y1010;
+        const yBot = y1020;
+
+        svg.innerHTML = `
+          <g fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="square">
+            <!-- Merge bracket: top arm at y1010, bottom arm at y1020 -->
+            <path d="M ${xBracket - tick} ${yTop} H ${xBracket} V ${yBot} H ${xBracket - tick}" />
+
+            <!-- 1010 -> bracket -->
+            <path d="M ${r1010.right} ${y1010} H ${xBracket - linePad}" />
+
+            <!-- 1020 -> bracket -->
+            <path d="M ${r1020.right} ${y1020} H ${xBracket - linePad}" />
+
+            <!-- bracket -> 1030 -->
+            <path d="M ${xBracket} ${yMid} H ${r1030.left}" />
+
+            <!-- 1030 -> 1040 -->
+            <path d="M ${r1030.right} ${yMid} H ${r1040.left}" />
+
+            <!-- 1040 -> 1050 -->
+            <path d="M ${r1040.right} ${yMid} H ${r1050.left}" />
+          </g>
+        `;
+      }
+
+      function enableRipple() {
+        boxes.forEach(box => {
+          box.addEventListener("pointerdown", (e) => {
+            const r = box.getBoundingClientRect();
+            box.style.setProperty("--rx", (e.clientX - r.left) + "px");
+            box.style.setProperty("--ry", (e.clientY - r.top) + "px");
+            box.classList.remove("ripple");
+            void box.offsetWidth;
+            box.classList.add("ripple");
+          });
+          box.addEventListener("animationend", () => box.classList.remove("ripple"));
+        });
+      }
+
+      function layout() {
+        fitSquares();
+        requestAnimationFrame(drawWires);
+      }
+
+      window.addEventListener("load", () => {
+        enableRipple();
+        layout();
+      });
+
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__layoutT);
+        window.__layoutT = setTimeout(layout, 80);
+      });
+    })();
+  </script>
 </body>
 </html>
+
 
 
 
