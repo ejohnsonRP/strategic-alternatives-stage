@@ -7,10 +7,10 @@
 
   <style>
     :root{
-      /* ✅ teal for bar + boxes + lines */
+      /* bright blue for bar + boxes + lines */
       --teal:#2f64f5;
 
-      /* ✅ EXACT 4.3 spacing */
+      /* spacing */
       --gap:6px;
       --pad:6px;
 
@@ -19,10 +19,17 @@
       --mid:55px;
       --flowW:574px; /* 110*5 + 6*4 */
 
-      /* ✅ EXACT 4.3 typography */
+      /* typography */
       --headerFont:15px;
       --stepFont:11px;
       --textFont:9.2px;
+
+      /* ✅ 1.4-style hover/active fills, but OPAQUE (not see-through) */
+      --hoverFill:#eaf0ff;
+      --activeFill:#dfe8ff;
+
+      /* ripple is blue (like 1.4) */
+      --ripple:rgba(47,100,245,.28);
     }
 
     body{
@@ -40,7 +47,6 @@
       overflow:visible;
     }
 
-    /* ✅ bar height + position matches 4.3 */
     .header{
       width:var(--flowW);
       background:var(--teal);
@@ -67,16 +73,16 @@
 
     a.box{
       width:var(--box);
-      height:var(--box);              /* perfect square */
+      height:var(--box);
       border:2px solid var(--teal);
       padding:var(--pad);
       box-sizing:border-box;
-      background:#fff;
+      background:#fff; /* stays white */
       text-decoration:none;
       color:inherit;
       cursor:pointer;
       position:relative;
-      overflow:hidden;                /* ripple stays inside */
+      overflow:hidden;
       transition:background-color 120ms ease, transform 80ms ease;
       outline:none;
       z-index:1;
@@ -84,14 +90,15 @@
       display:block;
     }
 
-    a.box:hover{ background:rgba(46,125,50,.12); }
+    /* ✅ same “feel” as 1.4 (subtle tint), but opaque */
+    a.box:hover{ background:var(--hoverFill); }
     a.box:active{
       transform:scale(.99);
-      background:rgba(46,125,50,.18);
+      background:var(--activeFill);
     }
 
     a.box:focus-visible{
-      box-shadow:0 0 0 3px rgba(46,125,50,.35);
+      box-shadow:0 0 0 3px rgba(47,100,245,.25);
     }
 
     .step{
@@ -110,7 +117,7 @@
       white-space:nowrap;
     }
 
-    /* connector lines (same style as 4.3, extended to 5 boxes) */
+    /* connector lines */
     .line{
       position:absolute;
       height:2px;
@@ -122,7 +129,8 @@
     .line.l12{ left:var(--box); width:var(--gap); }
     .line.l23{ left:calc(var(--box) * 2 + var(--gap)); width:var(--gap); }
     .line.l34{ left:calc(var(--box) * 3 + var(--gap) * 2); width:var(--gap); }
-    .line.l45{ left:calc(var(--box) * 4 + var(--gap) * 3); width:var(--gap); }
+
+    /* ✅ REMOVED: .line.l45 */
 
     /* click ripple */
     a.box::after{
@@ -133,7 +141,7 @@
       width:10px;
       height:10px;
       border-radius:999px;
-      background:rgba(46,125,50,.35);
+      background:var(--ripple);
       transform:translate(-50%,-50%) scale(1);
       opacity:0;
       pointer-events:none;
@@ -166,7 +174,7 @@
          target="_blank" rel="noopener noreferrer">
         <div class="step">1120</div>
         <div class="text">
-          Build Lons<br/>
+          Build Long<br/>
           List<br/>
         </div>
       </a>
@@ -188,7 +196,7 @@
         <div class="step">1140</div>
         <div class="text">
           Create<br/>
-          Short List &<br/>
+          Short List &amp;<br/>
           Prioritize<br/>
           Approaches<br/>
         </div>
@@ -197,7 +205,7 @@
       <div class="line l12" aria-hidden="true"></div>
       <div class="line l23" aria-hidden="true"></div>
       <div class="line l34" aria-hidden="true"></div>
-      <div class="line l45" aria-hidden="true"></div>
+      <!-- removed l45 -->
     </div>
   </div>
 
@@ -209,7 +217,6 @@
       const setVar = (k, v) => root.style.setProperty(k, v);
 
       function fitSquares() {
-        // Smallest uniform square that fits the largest box content (same as 4.3).
         const prev = boxes.map(b => ({ w: b.style.width, h: b.style.height }));
         boxes.forEach(b => { b.style.width = "auto"; b.style.height = "auto"; });
         void flow.offsetWidth;
@@ -258,6 +265,7 @@
   </script>
 </body>
 </html>
+
 
 
 
